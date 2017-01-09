@@ -13,7 +13,9 @@
 //#import "OverdueCouponsViewController.h"
 //#import "CustomViewController.h"
 #import "AllOrderListViewController.h"
-#import "TestViewController.h"
+#import "CompleteOrderListViewController.h"
+#import "DistributionOrderListViewController.h"
+#import "NewOrderListViewController.h"
 
 
 //获取控制器的宽高
@@ -133,11 +135,19 @@ NSLog(@"y;%f",_MeScroolView.frame.origin.y);
     
     UILabel *hostLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 20, 100, 40)];
     hostLabel.text = @"好当家";
-    hostLabel.font = [UIFont systemFontOfSize:20.0f];
+    hostLabel.font = [UIFont systemFontOfSize:17.0f];
     hostLabel.textColor = [UIColor whiteColor];
     [view addSubview:hostLabel];
+    
+    UIButton *userButton = [[UIButton alloc]initWithFrame:CGRectMake(ScreenWidth-60, 20, 60, 40)];
+    userButton.titleLabel.font = [UIFont systemFontOfSize: 17.0];
+    [userButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [userButton setTitle:@"个人" forState:UIControlStateNormal];
+    [userButton setImageEdgeInsets:UIEdgeInsetsMake(8, 8, 8, 8) ];//将按钮的上下左右都缩进8个单位
+    [userButton addTarget:self action:@selector(UserBtnClick:) forControlEvents:UIControlEventTouchUpInside];//为按钮增加时间侦听
+    [view addSubview:userButton];
 
-    [self initWithAddVCARY:@[[AllOrderListViewController new],[TestViewController new],[TestViewController new],[TestViewController new]]TitleS:@[@"全部",@"待发货",@"已发货",@"已收货"]];
+    [self initWithAddVCARY:@[[AllOrderListViewController new],[NewOrderListViewController new],[DistributionOrderListViewController new],[NewOrderListViewController new]]TitleS:@[@"全部",@"待发货",@"已发货",@"已收货"]];
     
 }
 

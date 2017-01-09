@@ -1,27 +1,27 @@
 //
-//  AllOrderListViewController.m
+//  NewOrderListViewController.m
 //  HDJMerchant
 //
 //  Created by edz on 17/1/6.
 //  Copyright © 2017年 edz. All rights reserved.
 //
 
-#import "AllOrderListViewController.h"
+#import "NewOrderListViewController.h"
 #import "OrderDetailViewController.h"
-#import "AllOrderEntity.h"
-#import "AllOrderViewCell.h"
+#import "NewOrderEntity.h"
+#import "NewOrderViewCell.h"
 
 #import "GlobalDefine.h"
 #import "PPNetworkHelper.h"
 #import "PPNetworkCache.h"
 
-@interface AllOrderListViewController ()<UITableViewDelegate,UITableViewDataSource>{
+@interface NewOrderListViewController ()<UITableViewDelegate,UITableViewDataSource>{
     
 }
 
 @end
 
-@implementation AllOrderListViewController
+@implementation NewOrderListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -56,27 +56,26 @@
 #pragma mark - 加载数据
 
 - (void)loadData {
-    
     NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:
                           [NSNumber numberWithInteger:_page],@"page",
                          @"36",  @"shop_id",
-                         @"0",@"type",
+                         @"1",@"type",
                          nil];
     NSString *url = [PPNetworkHelper requestURL:@"Api/Order/showOrderInfo?"];
     
     [PPNetworkHelper GET:url parameters:dic responseCache:^(NetworkingResponse *responseCache) {
         
     } success:^(NetworkingResponse *responseObject) {
-        if(_page == 1){
+        if (_page == 1) {
             [_data removeAllObjects];
         }
         //接口返回数据
         NSArray *orderArray = [responseObject valueForKey:@"data"];
         for (NSDictionary *dic in orderArray) {
-            AllOrderEntity *allOrderEntity = [[AllOrderEntity alloc]initWithAttributes:dic];
+            NewOrderEntity *allOrderEntity = [[NewOrderEntity alloc]initWithAttributes:dic];
             [_data addObject:allOrderEntity];
         }
-        NSLog(@"aaa:%ld",_data.count);
+        
         [_mTableView reloadData];
         
     } failure:^(NSError *error) {
@@ -86,6 +85,8 @@
     
 
 }
+
+
 
 #pragma mark - SDRefresh
 
@@ -98,8 +99,7 @@
     __weak SDRefreshHeaderView *weakRefreshHeader = refreshHeader;
     refreshHeader.beginRefreshingOperation = ^{
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-               _page = 1;
-            
+                        _page = 1;
             [self loadData];
             [weakRefreshHeader endRefreshing];
         });
@@ -112,6 +112,7 @@
         _page = 1;
         [self loadData];
 }
+
 
 - (void)setupFooter
 {
@@ -139,12 +140,12 @@
 #pragma mark - UITableView
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    AllOrderViewCell *cell = (AllOrderViewCell *)[self tableView:_mTableView cellForRowAtIndexPath:indexPath];
+    NewOrderViewCell *cell = (NewOrderViewCell *)[self tableView:_mTableView cellForRowAtIndexPath:indexPath];
     return cell.frame.size.height;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    AllOrderEntity *entity = [_data objectAtIndex:section];
+    NewOrderEntity *entity = [_data objectAtIndex:section];
     NSLog(@"rowsCoutn:%ld",[entity.goodInfo count]);
     return [entity.goodInfo count];
 }
@@ -164,7 +165,7 @@
 
 // section 头部视图
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    AllOrderEntity *entity = [_data objectAtIndex:section];
+    NewOrderEntity *entity = [_data objectAtIndex:section];
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 25)];
     [view setBackgroundColor:[UIColor whiteColor]];
@@ -195,7 +196,7 @@
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     
-    AllOrderEntity *entity = [_data objectAtIndex:section];
+    NewOrderEntity *entity = [_data objectAtIndex:section];
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 25)];
     [view setBackgroundColor:[UIColor whiteColor]];
@@ -226,15 +227,15 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"AllOrderViewCell";
-    AllOrderViewCell *cell = (AllOrderViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString *CellIdentifier = @"NewOrderViewCell";
+    NewOrderViewCell *cell = (NewOrderViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"AllOrderViewCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"NewOrderViewCell" owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
-    AllOrderEntity *entity = [_data objectAtIndex:[indexPath section]];
+    NewOrderEntity *entity = [_data objectAtIndex:[indexPath section]];
     NSArray *carts = [entity.goodInfo objectAtIndex:[indexPath row]];
     
     //cell渲染
@@ -244,15 +245,12 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    AllOrderEntity *entity = [_data objectAtIndex:[indexPath row]];
+    NewOrderEntity *entity = [_data objectAtIndex:[indexPath row]];
     
-    OrderDetailViewController * disheView = [[OrderDetailViewController alloc]init];
-//    disheView.goodId = entity.productID.intValue;
-    disheView.title = @"商品详情";
-    disheView.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:disheView animated:YES];
     
 }
+
+
 
 
 
@@ -261,7 +259,6 @@
     [_mTableView deselectRowAtIndexPath:[_mTableView indexPathForSelectedRow] animated:YES];
     [super viewWillAppear:animated];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

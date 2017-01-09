@@ -1,5 +1,5 @@
 //
-//  AllOrderViewCell.h
+//  NewOrderViewCell.h
 //  NewStore
 //
 //  Created by edz on 17/1/7.
@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AllOrderEntity.h"
+#import "NewOrderEntity.h"
 
-@interface AllOrderViewCell : UITableViewCell
+@interface NewOrderViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *proImage;
 @property (weak, nonatomic) IBOutlet UILabel *proName;
 @property (weak, nonatomic) IBOutlet UILabel *proPrice;
