@@ -1,0 +1,39 @@
+//
+//  Prefix.pch
+//  NewStore
+//
+//  Created by yusaiyan on 16/5/5.
+//  Copyright © 2016年 QunYu_TD. All rights reserved.
+//
+
+#ifndef Prefix_pch
+#define Prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+// App重要参数及配置信息
+#import "ConfigHeader.h"
+
+//
+#import "ConstHeader.h"
+
+// pod
+#import "PodsHeader.h"
+
+// 第三方
+#import "TPLibHeader.h"
+
+// 所有UI
+#import "ControllersHeader.h"
+
+
+#import <CoreData/CoreData.h>
+
+//宏定义全局并发队列
+#define global_quque    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+//宏定义主队列
+#define main_queue       dispatch_get_main_queue()
+
+
+#endif /* Prefix_pch */
