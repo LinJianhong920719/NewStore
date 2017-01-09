@@ -16,6 +16,7 @@
 #import "CompleteOrderListViewController.h"
 #import "DistributionOrderListViewController.h"
 #import "NewOrderListViewController.h"
+#import "ShopViewController.h"
 
 
 //获取控制器的宽高
@@ -164,5 +165,11 @@ NSLog(@"y;%f",_MeScroolView.frame.origin.y);
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [super viewWillDisappear:animated];
 }
+- (IBAction)UserBtnClick:(id)sender {
+    ShopViewController *sc1= [[ShopViewController alloc]initWithNibName:@"ShopViewController" bundle:[NSBundle mainBundle]];
+    sc1.title = @"个人中心";
+    [self.navigationController pushViewController:sc1 animated:YES];
+}
+
 
 @end

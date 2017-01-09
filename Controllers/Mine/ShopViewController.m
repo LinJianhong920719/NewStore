@@ -1,19 +1,18 @@
 //
-//  OrderDetailViewController.m
-//  HaoDangJiaMerchant
+//  ShopViewController.m
+//  NewStore
 //
-//  Created by edz on 17/1/6.
-//  Copyright © 2017年 hdj. All rights reserved.
+//  Created by edz on 17/1/9.
+//  Copyright © 2017年 QunYu_TD. All rights reserved.
 //
 
-#import "OrderDetailViewController.h"
+#import "ShopViewController.h"
 
-
-@interface OrderDetailViewController ()
+@interface ShopViewController ()
 
 @end
 
-@implementation OrderDetailViewController
+@implementation ShopViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -26,12 +25,17 @@
     [btn addTarget:self action:@selector(goBackAction) forControlEvents: UIControlEventTouchUpInside];
     
     UIBarButtonItem*back=[[UIBarButtonItem alloc]initWithCustomView:btn];
-    self.view.backgroundColor = [UIColor redColor];
+
     self.navigationItem.leftBarButtonItem=back;
     
+    _shopIntroduce.layer.borderColor = [UIColor grayColor].CGColor;
+    
+    _shopIntroduce.layer.borderWidth =1.0;
+    
+    _shopIntroduce.layer.cornerRadius =5.0;
+    _shopIntroduce.editable = NO;
     
     
-    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,11 +52,5 @@
     // Pass the selected object to the new view controller.
 }
 */
--(void)goBackAction{
-    
-    // 在这里增加返回按钮的自定义动作
-    
-    [self.navigationController popViewControllerAnimated:YES];
-    
-}
+
 @end
