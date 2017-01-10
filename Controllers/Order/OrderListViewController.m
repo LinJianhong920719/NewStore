@@ -17,6 +17,7 @@
 #import "DistributionOrderListViewController.h"
 #import "NewOrderListViewController.h"
 #import "ShopViewController.h"
+#import "RegisterViewController.h"
 
 
 //获取控制器的宽高
@@ -148,7 +149,7 @@ NSLog(@"y;%f",_MeScroolView.frame.origin.y);
     [userButton addTarget:self action:@selector(UserBtnClick:) forControlEvents:UIControlEventTouchUpInside];//为按钮增加时间侦听
     [view addSubview:userButton];
 
-    [self initWithAddVCARY:@[[AllOrderListViewController new],[NewOrderListViewController new],[DistributionOrderListViewController new],[NewOrderListViewController new]]TitleS:@[@"全部",@"待发货",@"已发货",@"已收货"]];
+    [self initWithAddVCARY:@[[AllOrderListViewController new],[NewOrderListViewController new],[DistributionOrderListViewController new],[CompleteOrderListViewController new]]TitleS:@[@"全部",@"待发货",@"已发货",@"已收货"]];
     
 }
 
@@ -169,6 +170,7 @@ NSLog(@"y;%f",_MeScroolView.frame.origin.y);
     ShopViewController *sc1= [[ShopViewController alloc]initWithNibName:@"ShopViewController" bundle:[NSBundle mainBundle]];
     sc1.title = @"个人中心";
     [self.navigationController pushViewController:sc1 animated:YES];
+
 }
 
 

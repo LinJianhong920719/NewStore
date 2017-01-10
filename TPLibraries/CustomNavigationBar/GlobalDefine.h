@@ -140,6 +140,7 @@
 #define RGB_TextLightDark                       RGB(50.0f, 50.0f, 50.0f)
 #define RGB_TextDark                            RGB(10.0f, 10.0f, 10.0f)
 #define RGB_TextAppOrange                       RGB(224.0f, 83.0f, 51.0f)
+#define RGB_FONT                                RGB(102.0f,102.0f,102.0f)
 #define SIZE_TextSmall                          10.0f
 #define SIZE_TextContentNormal                  13.0f
 #define SIZE_TextTitleMini                      15.0f

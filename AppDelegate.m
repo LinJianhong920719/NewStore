@@ -16,6 +16,7 @@
 #import "UMSocialWechatHandler.h"
 #import "UMessage.h"
 #import "OrderListViewController.h"
+#import "RegisterViewController.h"
 
 #import <MeiQiaSDK/MQManager.h>//美洽
 
@@ -34,10 +35,17 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     //设置OrderListViewController为根视图
-    OrderListViewController *oc = [[OrderListViewController alloc]init];
-    UINavigationController *root = [[UINavigationController alloc]initWithRootViewController:oc];
-    self.window.rootViewController = root;
-    
+    NSString *shopId = [UserInformation getUserId];
+    if (shopId == nil || [shopId isEqualToString:@""]) {
+       RegisterViewController *oc = [RegisterViewController alloc];
+        UINavigationController *root = [[UINavigationController alloc]initWithRootViewController:oc];
+        self.window.rootViewController = root;
+    }else{
+        OrderListViewController *oc = [[OrderListViewController alloc]init];
+        UINavigationController *root = [[UINavigationController alloc]initWithRootViewController:oc];
+        self.window.rootViewController = root;
+    }
+
     [self.window makeKeyAndVisible];
     
     self.window.backgroundColor = [UIColor whiteColor];

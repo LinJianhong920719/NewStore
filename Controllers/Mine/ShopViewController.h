@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *wallet;
 @property (weak, nonatomic) IBOutlet UILabel *distribution;
 @property (weak, nonatomic) IBOutlet UITextView *shopIntroduce;
+- (IBAction)loginOut:(id)sender;
 
 
 @end

@@ -58,7 +58,7 @@
 - (void)loadData {
     NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:
                           [NSNumber numberWithInteger:_page],@"page",
-                         @"36",  @"shop_id",
+                         [UserInformation getUserId],  @"shop_id",
                          @"1",@"type",
                          nil];
     NSString *url = [PPNetworkHelper requestURL:@"Api/Order/showOrderInfo?"];
@@ -70,6 +70,11 @@
             [_data removeAllObjects];
         }
         //接口返回数据
+        NSString *status = [responseObject valueForKey:@"status"];
+        if ([status integerValue] == 201) {
+            //显示无订单页面
+            [self orederNullView];
+        }else{
         NSArray *orderArray = [responseObject valueForKey:@"data"];
         for (NSDictionary *dic in orderArray) {
             NewOrderEntity *allOrderEntity = [[NewOrderEntity alloc]initWithAttributes:dic];
@@ -77,7 +82,7 @@
         }
         
         [_mTableView reloadData];
-        
+        }
     } failure:^(NSError *error) {
     
         
@@ -85,7 +90,38 @@
     
 
 }
-
+-(void)orederNullView{
+    UIView *orderNullView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
+    orderNullView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:orderNullView];
+    
+    UIImageView *orderNullImage = [[UIImageView alloc]initWithFrame:CGRectMake(turn5(117), 110, 90, 90)];
+    [orderNullImage setImage:[UIImage imageNamed:@"order_null"]];
+    [orderNullView addSubview:orderNullImage];
+    UILabel *orderNullLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 210, ScreenWidth, 20)];
+    orderNullLabel.text = @"暂无订单";
+    orderNullLabel.font = [UIFont systemFontOfSize:15.0f];
+    orderNullLabel.textColor = RGB_FONT;
+    orderNullLabel.textAlignment = NSTextAlignmentCenter;
+    [orderNullView addSubview:orderNullLabel];
+    
+    UIButton *readloadDataBtn = [[UIButton alloc]initWithFrame:CGRectMake(turn5(105), 250, 120, 30)];
+    [readloadDataBtn setTitle:@"刷新订单页面" forState:UIControlStateNormal];
+    [readloadDataBtn setTitleColor:RGB_FONT forState:UIControlStateNormal];
+    readloadDataBtn.titleLabel.font = [UIFont systemFontOfSize:15.0f];
+    [readloadDataBtn.layer setMasksToBounds:YES];
+    [readloadDataBtn.layer setCornerRadius:6.0]; //设置矩形四个圆角半径
+    [readloadDataBtn.layer setBorderWidth:1.0]; //边框宽度
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 102.0f/255.0f, 102.0f/255.0f, 102.0f/255.0f, 1 });
+    [readloadDataBtn addTarget:self action:@selector(refeshOrder) forControlEvents:UIControlEventTouchUpInside];
+    
+    [readloadDataBtn.layer setBorderColor:colorref];//边框颜色
+    
+    [orderNullView addSubview:readloadDataBtn];
+    
+    
+}
 
 
 #pragma mark - SDRefresh
