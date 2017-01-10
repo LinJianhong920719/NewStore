@@ -85,6 +85,7 @@
         disheView.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:disheView animated:YES];
     } failure:^(NSError *error) {
+        [hud hideAnimated:YES];
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
         hud.label.text = @"登录失败";

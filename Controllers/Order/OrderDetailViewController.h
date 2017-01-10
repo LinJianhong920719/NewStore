@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OrderDetailViewController : UIViewController
-
+@interface OrderDetailViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
+@property (nonatomic, strong) UITableView* mTableView;
+@property (nonatomic, weak) SDRefreshHeaderView *refreshHeader;
+@property (nonatomic, weak) SDRefreshFooterView *refreshFooter;
+@property (nonatomic, strong) NSMutableArray* data;
 @end
