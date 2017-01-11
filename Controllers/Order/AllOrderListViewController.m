@@ -30,6 +30,8 @@
     _page = 1;
     [self setupHeader];
     [self setupFooter];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refeshOrder) name:@"refreshOrder" object:nil];
 }
 
 - (void)initUI {
@@ -282,11 +284,11 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    AllOrderEntity *entity = [_data objectAtIndex:[indexPath row]];
+    AllOrderEntity *entity = [_data objectAtIndex:[indexPath section]];
     
     OrderDetailViewController * disheView = [[OrderDetailViewController alloc]init];
-//    disheView.goodId = entity.productID.intValue;
-    disheView.title = @"商品详情";
+    disheView.orderID = entity.orderTotalId;
+    disheView.title = @"订单详情";
     disheView.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:disheView animated:YES];
     

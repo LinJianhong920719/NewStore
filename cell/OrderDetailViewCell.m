@@ -29,17 +29,17 @@
 
     // Configure the view for the selected state
 }
-- (void)cellDataDraw:(NSArray *)art {
+- (void)cellDataDraw:(OrderEntity *)orderEntity {
     
-    [proImage sd_setImageWithURL:[NSURL URLWithString:[art valueForKey:@"good_image"]] placeholderImage:[UIImage imageNamed:@"loading-6"] options:SDWebImageRetryFailed];
     
-    if (art) {
-        proName.text = [art valueForKey:@"good_name"];
-        proNum.text = [NSString stringWithFormat:@"x%@",[art valueForKey:@"nums"]];
-        proSize.text = [NSString stringWithFormat:@"规格:%@",[art valueForKey:@"good_size"]];
-        NSString *price = [art valueForKey:@"good_price"];
+    
+    if (orderEntity) {
+        [proImage sd_setImageWithURL:[NSURL URLWithString:orderEntity.goodImage] placeholderImage:[UIImage imageNamed:@"loading-6"] options:SDWebImageRetryFailed];
+        proName.text = orderEntity.goodName;
+        proNum.text = [NSString stringWithFormat:@"x%@",orderEntity.goodNums];
+        proSize.text = [NSString stringWithFormat:@"规格:%@",orderEntity.goodSize];
+        NSString *price = orderEntity.goodPirce;
         proPrice.text = [NSString stringWithFormat:@"￥%0.2f",[price floatValue]];
-        proTime.text = [art valueForKey:@""];
     } else {
         proName.text = @"商品";
         proNum.text = @"x1";

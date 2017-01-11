@@ -16,7 +16,7 @@
 #import "PPNetworkCache.h"
 
 @interface NewOrderListViewController ()<UITableViewDelegate,UITableViewDataSource>{
-    
+    UIView *orderNullView;
 }
 
 @end
@@ -27,9 +27,11 @@
     [super viewDidLoad];
     [self loadData];
     [self initUI];
+    [self orederNullView];
     _page = 1;
     [self setupHeader];
     [self setupFooter];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refeshOrder) name:@"refreshOrder" object:nil];
 }
 
 - (void)initUI {
@@ -56,6 +58,7 @@
 #pragma mark - 加载数据
 
 - (void)loadData {
+    
     NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:
                           [NSNumber numberWithInteger:_page],@"page",
                          [UserInformation getUserId],  @"shop_id",
@@ -73,8 +76,11 @@
         NSString *status = [responseObject valueForKey:@"status"];
         if ([status integerValue] == 201) {
             //显示无订单页面
-            [self orederNullView];
+            orderNullView.hidden = NO;
+            _mTableView.hidden = YES;
         }else{
+            orderNullView.hidden = YES;
+            _mTableView.hidden = NO;
         NSArray *orderArray = [responseObject valueForKey:@"data"];
         for (NSDictionary *dic in orderArray) {
             NewOrderEntity *allOrderEntity = [[NewOrderEntity alloc]initWithAttributes:dic];
@@ -91,7 +97,8 @@
 
 }
 -(void)orederNullView{
-    UIView *orderNullView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
+    _mTableView.hidden = YES;
+    orderNullView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
     orderNullView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:orderNullView];
     

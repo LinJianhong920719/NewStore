@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AllOrderEntity.h"
+#import "OrderEntity.h"
 
 @interface OrderDetailViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *proImage;
@@ -18,5 +18,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *proTime;
 
 
-- (void)cellDataDraw:(NSArray *)model;
+- (void)cellDataDraw:(OrderEntity *)model;
 @end

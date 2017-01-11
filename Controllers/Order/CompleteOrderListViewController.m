@@ -30,6 +30,7 @@
     _page = 1;
     [self setupHeader];
     [self setupFooter];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refeshOrder) name:@"refreshOrder" object:nil];
 }
 
 - (void)initUI {

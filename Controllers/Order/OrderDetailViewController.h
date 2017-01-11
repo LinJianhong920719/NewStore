@@ -13,4 +13,10 @@
 @property (nonatomic, weak) SDRefreshHeaderView *refreshHeader;
 @property (nonatomic, weak) SDRefreshFooterView *refreshFooter;
 @property (nonatomic, strong) NSMutableArray* data;
+@property (nonatomic, strong) NSArray* addressInfo;
+@property (nonatomic, strong) NSArray* couponInfo;
+@property (nonatomic, strong) NSArray* orderInfo;
+@property (nonatomic, strong) NSMutableArray* ortherInfo;
+@property (nonatomic, strong) NSString *orderID;
+
 @end

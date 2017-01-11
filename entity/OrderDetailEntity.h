@@ -10,22 +10,17 @@
 
 @interface OrderDetailEntity : NSObject
 
-@property (nonatomic, strong) NSString *isCancleOrder;
-@property (nonatomic, assign) NSInteger userId;
-@property (nonatomic, strong) NSString *isDelOrder;
-@property (nonatomic, strong) NSString *isDiscuss;
-@property (nonatomic, strong) NSString *shippingStatus;
-@property (nonatomic, strong) NSString *freightAmount;
-@property (nonatomic, strong) NSString *realAmount;
-@property (nonatomic, strong) NSString *useRemark;
-@property (nonatomic, strong) NSString *isDenialOrders;
-@property (nonatomic, strong) NSString *orderTotalId;
+@property (nonatomic, assign) NSString *userId;
 @property (nonatomic, strong) NSString *orderSn;
 @property (nonatomic, strong) NSString *addressId;
 @property (nonatomic, strong) NSString *couponId;
 @property (nonatomic, strong) NSString *tradeType;
-@property (nonatomic, strong) NSString *createTime;
+@property (nonatomic, strong) NSString *payStatus;
+@property (nonatomic, strong) NSMutableArray *addressInfo;
+@property (nonatomic, strong) NSMutableArray *couponInfo;
 @property (nonatomic, strong) NSMutableArray *goodInfo;
+@property (nonatomic, strong) NSMutableArray *orderInfo;
+
 
 - (id)initWithAttributes:(NSDictionary *)attributes;
 
