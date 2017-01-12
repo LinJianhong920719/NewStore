@@ -16,7 +16,7 @@
 #import "PPNetworkCache.h"
 
 @interface CompleteOrderListViewController ()<UITableViewDelegate,UITableViewDataSource>{
-    
+    UIView *orderNullView;
 }
 
 @end
@@ -27,6 +27,7 @@
     [super viewDidLoad];
     [self loadData];
     [self initUI];
+    [self orederNullView];
     _page = 1;
     [self setupHeader];
     [self setupFooter];
@@ -72,8 +73,11 @@
         NSString *status = [responseObject valueForKey:@"status"];
         if ([status integerValue] == 201) {
             //显示无订单页面
-            [self orederNullView];
-        }else{
+            orderNullView.hidden = NO;
+            _mTableView.hidden = YES;
+        }else if  ([status integerValue] == 200){
+            orderNullView.hidden = YES;
+            _mTableView.hidden = NO;
             NSArray *orderArray = [responseObject valueForKey:@"data"];
             for (NSDictionary *dic in orderArray) {
                 CompleteOrderEntity *allOrderEntity = [[CompleteOrderEntity alloc]initWithAttributes:dic];
@@ -91,7 +95,7 @@
 }
 
 -(void)orederNullView{
-    UIView *orderNullView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
+    orderNullView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
     orderNullView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:orderNullView];
     

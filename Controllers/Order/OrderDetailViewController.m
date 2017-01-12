@@ -127,7 +127,7 @@
     orderNo.text = [NSString stringWithFormat:@"订单编号:%@",orderDetailEntity.orderSn];
     orderNo.textColor = RGB(18, 104, 196);
     orderNo.textAlignment = NSTextAlignmentLeft;
-    orderNo.font = [UIFont systemFontOfSize:11.0f];
+    orderNo.font = [UIFont systemFontOfSize:12.0f];
     [view addSubview:orderNo];
     
     UILabel *orderStatus = [[UILabel alloc]initWithFrame:CGRectMake(orderNo.frame.size.width, 0, ScreenWidth-orderNo.frame.size.width-20, 25)];
@@ -143,7 +143,7 @@
     orderStatus.text = textStr;
     orderStatus.textColor = RGB(18, 104, 196);
     orderStatus.textAlignment = NSTextAlignmentRight;
-    orderStatus.font = [UIFont systemFontOfSize:11.0f];
+    orderStatus.font = [UIFont systemFontOfSize:12.0f];
     [view addSubview:orderStatus];
     
     UILabel *line = [[UILabel alloc]initWithFrame:CGRectMake(5, ViewBottom(orderStatus), ScreenWidth-10, 1)];
@@ -490,8 +490,8 @@
 }
 //联系买家
 -(IBAction)callBtnClicked:(id)sender{
-//    NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",[_addressInfo valueForKey:@"mobile"]];
-    NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",@"1008611"];
+    NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",[_addressInfo valueForKey:@"mobile"]];
+//    NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",@"1008611"];
     UIWebView * callWebview = [[UIWebView alloc] init];
     [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
     [self.view addSubview:callWebview];

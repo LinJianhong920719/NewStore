@@ -78,7 +78,7 @@
             //显示无订单页面
             orderNullView.hidden = NO;
             _mTableView.hidden = YES;
-        }else{
+        }else if  ([status integerValue] == 200){
             orderNullView.hidden = YES;
             _mTableView.hidden = NO;
         NSArray *orderArray = [responseObject valueForKey:@"data"];
@@ -97,8 +97,7 @@
 
 }
 -(void)orederNullView{
-    _mTableView.hidden = YES;
-    orderNullView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
+    UIView *orderNullView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
     orderNullView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:orderNullView];
     
@@ -288,8 +287,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NewOrderEntity *entity = [_data objectAtIndex:[indexPath row]];
+    NewOrderEntity *entity = [_data objectAtIndex:[indexPath section]];
     
+    OrderDetailViewController * disheView = [[OrderDetailViewController alloc]init];
+    disheView.orderID = entity.orderTotalId;
+    disheView.title = @"订单详情";
+    disheView.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:disheView animated:YES];
     
 }
 
