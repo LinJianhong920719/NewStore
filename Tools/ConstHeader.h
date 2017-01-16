@@ -16,7 +16,7 @@
 #import "PPNetworkHelper+Config.h"
 
 // 支付处理
-#import "PaymentModel.h"
+//#import "PaymentModel.h"
 
 //
 #import "Notification.h"

@@ -18,7 +18,8 @@
 #import "OrderListViewController.h"
 #import "RegisterViewController.h"
 
-#import <MeiQiaSDK/MQManager.h>//美洽
+
+
 
 @interface AppDelegate () <WXApiDelegate, UNUserNotificationCenterDelegate>
 
@@ -61,8 +62,108 @@
         [self setup_UMessage:launchOptions];
     });
     
+    //阿里云推送初始化
+    [self initCloudPush];
+    // 点击通知将App从关闭状态启动时，将通知打开回执上报
+    // [CloudPushSDK handleLaunching:launchOptions];(Deprecated from v1.8.1)
+    [CloudPushSDK sendNotificationAck:launchOptions];
     return YES;
 }
+- (void)initCloudPush {
+    // SDK初始化
+    [CloudPushSDK asyncInit:@"23604130" appSecret:@"81ce7b1f9cb5ba748b278962c71034ef" callback:^(CloudPushCallbackResult *res) {
+        if (res.success) {
+            NSLog(@"Push SDK init success, deviceId: %@.", [CloudPushSDK getDeviceId]);
+            NSLog(@"ssssid:%@",[CloudPushSDK getDeviceId]);
+        } else {
+            NSLog(@"Push SDK init failed, error: %@", res.error);
+        }
+    }];
+}
+
+/**
+ *    注册苹果推送，获取deviceToken用于推送
+ *
+ *    @param     application
+ */
+- (void)registerAPNS:(UIApplication *)application {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+        // iOS 8 Notifications
+        [application registerUserNotificationSettings:
+         [UIUserNotificationSettings settingsForTypes:
+          (UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge)
+                                           categories:nil]];
+        [application registerForRemoteNotifications];
+    }
+    else {
+        // iOS < 8 Notifications
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+         (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+    }
+}
+/*
+ *  苹果推送注册成功回调，将苹果返回的deviceToken上传到CloudPush服务器
+ */
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [CloudPushSDK registerDevice:deviceToken withCallback:^(CloudPushCallbackResult *res) {
+        if (res.success) {
+            NSLog(@"Register deviceToken success.");
+        } else {
+            NSLog(@"Register deviceToken failed, error: %@", res.error);
+        }
+    }];
+}
+/*
+ *  苹果推送注册失败回调
+ */
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"didFailToRegisterForRemoteNotificationsWithError %@", error);
+}
+/**
+ *    注册推送消息到来监听
+ */
+- (void)registerMessageReceive {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onMessageReceived:)
+                                                 name:@"CCPDidReceiveMessageNotification"
+                                               object:nil];
+}
+/**
+ *    处理到来推送消息
+ *
+ *    @param     notification
+ */
+- (void)onMessageReceived:(NSNotification *)notification {
+    CCPSysMessage *message = [notification object];
+    NSString *title = [[NSString alloc] initWithData:message.title encoding:NSUTF8StringEncoding];
+    NSString *body = [[NSString alloc] initWithData:message.body encoding:NSUTF8StringEncoding];
+    NSLog(@"Receive message title: %@, content: %@.", title, body);
+}
+
+
+/*
+ *  App处于启动状态时，通知打开回调
+ */
+- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo {
+    NSLog(@"Receive one notification.");
+    // 取得APNS通知内容
+    NSDictionary *aps = [userInfo valueForKey:@"aps"];
+    // 内容
+    NSString *content = [aps valueForKey:@"alert"];
+    // badge数量
+    NSInteger badge = [[aps valueForKey:@"badge"] integerValue];
+    // 播放声音
+    NSString *sound = [aps valueForKey:@"sound"];
+    // 取得Extras字段内容
+    NSString *Extras = [userInfo valueForKey:@"Extras"]; //服务端中Extras字段，key是自己定义的
+    NSLog(@"content = [%@], badge = [%ld], sound = [%@], Extras = [%@]", content, (long)badge, sound, Extras);
+    // iOS badge 清0
+    application.applicationIconBadgeNumber = 0;
+    // 通知打开回执上报
+    // [CloudPushSDK handleReceiveRemoteNotification:userInfo];(Deprecated from v1.8.1)
+    [CloudPushSDK sendNotificationAck:userInfo];
+}
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -73,12 +174,12 @@
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     
-     [MQManager closeMeiqiaService];
+//     [MQManager closeMeiqiaService];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-      [MQManager openMeiqiaService];
+//      [MQManager openMeiqiaService];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -89,17 +190,7 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    
-    [MQManager registerDeviceToken:deviceToken];
-    NSString *token = [[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""] stringByReplacingOccurrencesOfString: @">" withString: @""] stringByReplacingOccurrencesOfString: @" " withString: @""];
-    DLog(@"token === %@",token);
-    [UserInformation setToken:token];
-}
 
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    DLog(@"DeviceToken 获取失败，原因：%@",error);
-}
 
 // ----------------------------------------------------------------------------------------
 // 在 iOS8 系统中，还需要添加这个方法。通过新的 API 注册推送服务
@@ -111,28 +202,20 @@
 // ----------------------------------------------------------------------------------------
 // 请求委托打开一个URL资源（IOS9.0及以上）
 // ----------------------------------------------------------------------------------------
-- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary *)options {
-    
-    return [self applicationOpenURL:url];
-}
+//- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary *)options {
+
+//    return [self applicationOpenURL:url];
+//}
 
 // ----------------------------------------------------------------------------------------
 // 请求委托打开一个URL资源（IOS9.0及以下）
 // ----------------------------------------------------------------------------------------
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    
-    return [self applicationOpenURL:url];
-}
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+//    
+//    return [self applicationOpenURL:url];
+//}
 
-// ----------------------------------------------------------------------------------------
-// 当一个运行着的应用程序收到一个远程的通知时执行 (iOS10以下)
-// ----------------------------------------------------------------------------------------
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    //关闭友盟自带的弹出框
-    [UMessage setAutoAlert:NO];
-    [UMessage didReceiveRemoteNotification:userInfo];
-}
+
 
 // ----------------------------------------------------------------------------------------
 // iOS10新增：处理前台收到通知的代理方法
@@ -237,46 +320,46 @@
 
 #pragma mark - 第三方跳转回调
 
-- (BOOL)applicationOpenURL:(NSURL *)url {
-    
-    //调用其他SDK，例如支付宝SDK等
-    
-    NSString *urlStr = [url absoluteString];
-    
-    if ([urlStr rangeOfString:@"pingpp"].location != NSNotFound) {
-        BOOL canHandleURL = [Pingpp handleOpenURL:url withCompletion:nil];
-        return canHandleURL;
-    }
-    
-    //跳转支付宝钱包进行支付，处理支付结果
-    if ([url.host isEqualToString:@"safepay"]) {
-        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-            DLog(@"result = %@",resultDic);
-            
-            NSString *strStatus = [resultDic valueForKey:@"resultStatus"];
-            NSString *strMsg = [resultDic valueForKey:@"memo"];
-            NSString *strTitle = @"支付结果";
-            
-            if ([strStatus isEqualToString:@"9000"]) {
-                strStatus = @"1";
-            } else {
-                strStatus = @"0";
-            }
-            
-            NSArray *array = @[strStatus, strTitle, strMsg];
-            [[NSNotificationCenter defaultCenter] postNotificationName:PayForResults object:array];
-            
-        }];
-    }
-    
-    //微信支付
-    if ([urlStr rangeOfString:@"pay"].location != NSNotFound) {
-        return [WXApi handleOpenURL:url delegate:self];
-    }
-    
-    return YES;
-    
-}
+//- (BOOL)applicationOpenURL:(NSURL *)url {
+//    
+//    //调用其他SDK，例如支付宝SDK等
+//    
+//    NSString *urlStr = [url absoluteString];
+//    
+//    if ([urlStr rangeOfString:@"pingpp"].location != NSNotFound) {
+//        BOOL canHandleURL = [Pingpp handleOpenURL:url withCompletion:nil];
+//        return canHandleURL;
+//    }
+//    
+//    //跳转支付宝钱包进行支付，处理支付结果
+//    if ([url.host isEqualToString:@"safepay"]) {
+//        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
+//            DLog(@"result = %@",resultDic);
+//            
+//            NSString *strStatus = [resultDic valueForKey:@"resultStatus"];
+//            NSString *strMsg = [resultDic valueForKey:@"memo"];
+//            NSString *strTitle = @"支付结果";
+//            
+//            if ([strStatus isEqualToString:@"9000"]) {
+//                strStatus = @"1";
+//            } else {
+//                strStatus = @"0";
+//            }
+//            
+//            NSArray *array = @[strStatus, strTitle, strMsg];
+//            [[NSNotificationCenter defaultCenter] postNotificationName:PayForResults object:array];
+//            
+//        }];
+//    }
+//    
+//    //微信支付
+//    if ([urlStr rangeOfString:@"pay"].location != NSNotFound) {
+//        return [WXApi handleOpenURL:url delegate:self];
+//    }
+//    
+//    return YES;
+//    
+//}
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     // 处理微信的回调信息

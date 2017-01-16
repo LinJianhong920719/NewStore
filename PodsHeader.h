@@ -53,13 +53,14 @@
 /**
  *  Ping++
  */
-#import <Pingpp/Pingpp.h>
-#import <AlipaySDK/AlipaySDK.h>
+//#import <Pingpp/Pingpp.h>
+//#import <AlipaySDK/AlipaySDK.h>
 
 /**
  *  美洽 移动客服
  */
-#import <MeiQiaSDK/MeiQiaSDK.h>
+//#import <MeiQiaSDK/MeiQiaSDK.h>
+#import <CloudPushSDK/CloudPushSDK.h>
 
 /**
  *  友盟统计
