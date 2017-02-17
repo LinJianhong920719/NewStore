@@ -8,6 +8,7 @@
 
 #import "ShopViewController.h"
 #import "RegisterViewController.h"
+#import "MyWalletViewController.h"
 
 @interface ShopViewController ()
 
@@ -100,6 +101,13 @@
     [alert show];
     
     
+}
+
+- (IBAction)MyWalletAciont:(id)sender {
+    MyWalletViewController * disheView = [[MyWalletViewController alloc]init];
+    disheView.title = @"钱包";
+    disheView.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:disheView animated:YES];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{

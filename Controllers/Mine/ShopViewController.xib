@@ -144,6 +144,13 @@
                             <color key="textColor" red="0.69411764710000001" green="0.70196078429999997" blue="0.70588235290000001" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3gx-lW-Ikv">
+                            <rect key="frame" x="10" y="125" width="300" height="30"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            <connections>
+                                <action selector="MyWalletAciont:" destination="-1" eventType="touchUpInside" id="d6f-Q1-AHF"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
