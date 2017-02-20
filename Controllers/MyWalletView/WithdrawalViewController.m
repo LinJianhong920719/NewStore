@@ -57,6 +57,11 @@
         [alert show];
         return;
     }
+    if ([_money.text integerValue] > _amount) {
+        alert=[[UIAlertView alloc]initWithTitle:nil message:@"提现金额不允许高于余额" delegate:self cancelButtonTitle:@"返回" otherButtonTitles:nil, nil];
+        [alert show];
+        return;
+    }
     
     // 1. URL
     NSString *path = [NSString stringWithFormat:@"/Api/Wallet/getCashShop?"];

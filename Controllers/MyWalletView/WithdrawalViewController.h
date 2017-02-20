@@ -11,6 +11,7 @@
 @interface WithdrawalViewController : BaseViewController
 @property (weak, nonatomic) IBOutlet UITextField *zfbAccount;
 @property (weak, nonatomic) IBOutlet UITextField *money;
+@property (nonatomic, assign) NSInteger amount;
 
 - (IBAction)withdrawAction:(id)sender;
 @end

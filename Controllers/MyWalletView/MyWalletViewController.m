@@ -22,6 +22,7 @@
     UIButton *cardBtn;
     NSString *type;
     UILabel *money;
+    NSInteger amountInt;
 }
 @property (nonatomic, weak) SDRefreshHeaderView *refreshHeader;
 @property (nonatomic, weak) SDRefreshFooterView *refreshFooter;
@@ -160,47 +161,13 @@
         }else if([status integerValue] == 200){
             NSString *amount = [[dic valueForKey:@"data"]valueForKey:@"amount"];
             money.text = [NSString stringWithFormat:@"¥ %@",amount];
+            amountInt = amount;
         }
     }failure:^(NSError *error) {
         
     }];
     
     //获取余额明细
-//    NSDictionary *dics = [[NSDictionary alloc]initWithObjectsAndKeys:
-//                         [Tools stringForKey:KEY_USER_ID],@"user_id",
-//                          [NSNumber numberWithInteger:_pageno], @"pager",
-//                         nil];
-//    NSString *paths = [NSString stringWithFormat:@"/Api/Wallet/getWalletUserLog?"];
-//    NSLog(@"dics:%@",dics);
-//    [HYBNetworking updateBaseUrl:SERVICE_URL];
-//    [HYBNetworking getWithUrl:paths refreshCache:YES emphasis:NO params:dics success:^(id response) {
-//        
-//        NSDictionary *dic = response;
-//        NSString *statusMsg = [dic valueForKey:@"status"];
-//        if([statusMsg intValue] == 4001){
-//            //弹框提示获取失败
-//            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-//            hud.mode = MBProgressHUDModeText;
-//            hud.labelText = @"获取失败!";
-//            hud.yOffset = -50.f;
-//            hud.removeFromSuperViewOnHide = YES;
-//            [hud hide:YES afterDelay:2];
-//            return;
-//        }else if([statusMsg intValue] == 200){
-//            
-//            NSMutableArray *dataArray = [dic valueForKey:@"data"];
-//            for (NSDictionary* dic in dataArray) {
-//                MyWalletEntity* entity = [[MyWalletEntity alloc]initWithAttributes:dic];
-//                [_data addObject:entity];
-//            }
-//            [_mTableView reloadData];
-//
-//        }
-//        
-//    } fail:^(NSError *error) {
-//        
-//    }];
-    
     NSDictionary *dics = [[NSDictionary alloc]initWithObjectsAndKeys:
                          [UserInformation getUserId],  @"shop_id",
                          @"1",@"pager",
@@ -343,6 +310,7 @@
 -(void)withdrawal:(UIButton*)btn{
     WithdrawalViewController *vc= [[WithdrawalViewController alloc]initWithNibName:@"WithdrawalViewController" bundle:[NSBundle mainBundle]];
     vc.title = @"提现";
+    vc.amount = amountInt;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

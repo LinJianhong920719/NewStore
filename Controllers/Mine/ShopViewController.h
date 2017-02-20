@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ShopViewController : UIViewController
+@interface ShopViewController : BaseViewController
 @property (weak, nonatomic) IBOutlet UIImageView *shopImage;
 @property (weak, nonatomic) IBOutlet UILabel *shopName;
 @property (weak, nonatomic) IBOutlet UILabel *shopAddress;

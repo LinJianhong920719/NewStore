@@ -287,7 +287,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     DistributionOrderEntity *entity = [_data objectAtIndex:[indexPath row]];
-    
+    OrderDetailViewController * disheView = [[OrderDetailViewController alloc]init];
+    disheView.orderID = entity.orderTotalId;
+    disheView.title = @"订单详情";
+    disheView.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:disheView animated:YES];
     
 }
 
