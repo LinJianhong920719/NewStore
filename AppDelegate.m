@@ -69,12 +69,14 @@
     [CloudPushSDK sendNotificationAck:launchOptions];
     return YES;
 }
+
 - (void)initCloudPush {
     // SDK初始化
-    [CloudPushSDK asyncInit:@"23604130" appSecret:@"81ce7b1f9cb5ba748b278962c71034ef" callback:^(CloudPushCallbackResult *res) {
+    [CloudPushSDK asyncInit:@"23578970" appSecret:@"740868022d9faa954e5c5c1fbf92b781" callback:^(CloudPushCallbackResult *res) {
         if (res.success) {
             NSLog(@"Push SDK init success, deviceId: %@.", [CloudPushSDK getDeviceId]);
-            NSLog(@"ssssid:%@",[CloudPushSDK getDeviceId]);
+            NSLog(@"Token:%@",[CloudPushSDK getApnsDeviceToken]);
+            
         } else {
             NSLog(@"Push SDK init failed, error: %@", res.error);
         }
@@ -105,6 +107,10 @@
  *  苹果推送注册成功回调，将苹果返回的deviceToken上传到CloudPush服务器
  */
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSLog(@"sss:%@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
+                      stringByReplacingOccurrencesOfString: @">" withString: @""]
+                     stringByReplacingOccurrencesOfString: @" " withString: @""]);
+    NSLog(@"deviceToken:%@",deviceToken);
     [CloudPushSDK registerDevice:deviceToken withCallback:^(CloudPushCallbackResult *res) {
         if (res.success) {
             NSLog(@"Register deviceToken success.");

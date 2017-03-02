@@ -148,7 +148,7 @@
     // 进入页面自动加载一次数据
     [refreshHeader beginRefreshing];
 }
--(void)refeshOrder{
+- (void)refeshOrder{
         _page = 1;
         [self loadData];
 }
